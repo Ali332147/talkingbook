@@ -1,0 +1,332 @@
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:linear-gradient(135deg,#fff7ed,#fce7f3,#e0f2fe);color:#3f2d2d}.app{max-width:950px;margin:auto;padding:25px 16px 50px}header{text-align:center}.heart{font-size:45px}h1{font:700 clamp(34px,6vw,56px) Georgia;color:#9d174d;margin:5px 0}header p{color:#6b4f4f}select{padding:12px 20px;border:2px solid #f9a8d4;border-radius:12px;font-size:16px;margin:12px}.book{background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px #0002}.art{height:250px;background:linear-gradient(#bae6fd,#dcfce7);display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:42px}.art div{font-size:90px;letter-spacing:-18px}.story{padding:32px 40px 42px}.story small{color:#db2777;font-weight:bold;letter-spacing:2px}.story h2{font:700 32px Georgia;color:#9a3412}.story p{font:20px Georgia;line-height:1.9;white-space:pre-line}.status{text-align:center;background:#fff;border-radius:14px;padding:14px;margin:18px 0;box-shadow:0 5px 20px #0001;color:#9d174d;font-weight:bold}.controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.controls button{border:0;border-radius:13px;padding:13px 17px;font-weight:bold;cursor:pointer;box-shadow:0 5px 15px #0002}.controls button:nth-child(2),.controls button:nth-child(3){background:#be185d;color:#fff}.controls button:nth-child(4){background:#374151;color:#fff}.progress{height:9px;background:#fff8;border-radius:20px;margin-top:22px;overflow:hidden}.progress i{display:block;height:100%;width:10%;background:#be185d;transition:.3s}#count{text-align:center;font-weight:bold;margin-top:9px}@media(max-width:600px){.story{padding:25px}.story h2{font-size:27px}.story p{font-size:18px}.art{height:210px}.art div{font-size:62px}}
+/* ==========================================
+   ANIMATED FAMILY SCENE
+   ========================================== */
+
+.art{
+    position:relative;
+    overflow:hidden;
+    min-height:250px;
+    background:
+      linear-gradient(#bae6fd 0%, #dbeafe 55%, #dcfce7 56%, #bbf7d0 100%);
+}
+
+/* floating sun */
+.animated-float{
+    animation: floatSun 4s ease-in-out infinite;
+}
+
+@keyframes floatSun{
+    0%,100%{transform:translateY(0) rotate(-3deg)}
+    50%{transform:translateY(-12px) rotate(3deg)}
+}
+
+/* clouds move across the scene */
+.cloud{
+    position:absolute;
+    opacity:.75;
+    font-size:32px;
+    pointer-events:none;
+}
+
+.cloud1{
+    left:8%;
+    top:28px;
+    animation:cloudMove1 16s linear infinite;
+}
+
+.cloud2{
+    left:62%;
+    top:65px;
+    animation:cloudMove2 20s linear infinite;
+}
+
+@keyframes cloudMove1{
+    0%{transform:translateX(-20px)}
+    50%{transform:translateX(80px)}
+    100%{transform:translateX(-20px)}
+}
+
+@keyframes cloudMove2{
+    0%{transform:translateX(50px)}
+    50%{transform:translateX(-70px)}
+    100%{transform:translateX(50px)}
+}
+
+/* family */
+.family-row{
+    position:relative;
+    z-index:3;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:10px;
+    margin-top:35px;
+}
+
+.character{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    min-width:74px;
+    transform-origin:center bottom;
+    animation:characterFloat 3.2s ease-in-out infinite;
+}
+
+.character:nth-child(2){animation-delay:.25s}
+.character:nth-child(3){animation-delay:.5s}
+.character:nth-child(4){animation-delay:.75s}
+.character:nth-child(5){animation-delay:1s}
+
+.character .head{
+    position:relative;
+    font-size:65px;
+    line-height:1;
+    filter:drop-shadow(0 5px 5px rgba(0,0,0,.15));
+    transform-origin:center bottom;
+}
+
+.character span{
+    margin-top:3px;
+    padding:4px 8px;
+    border-radius:10px;
+    background:rgba(255,255,255,.82);
+    color:#7c2d12;
+    font-size:11px;
+    font-weight:700;
+}
+
+/* body bobbing / gentle up-down */
+@keyframes characterFloat{
+    0%,100%{
+        transform:translateY(0) rotate(-1deg);
+    }
+    50%{
+        transform:translateY(-9px) rotate(1deg);
+    }
+}
+
+/* active speaker gets stronger movement */
+.character.speaking{
+    animation:speakerBounce .42s ease-in-out infinite alternate;
+}
+
+@keyframes speakerBounce{
+    from{
+        transform:translateY(0) rotate(-2deg) scale(1);
+    }
+    to{
+        transform:translateY(-7px) rotate(2deg) scale(1.045);
+    }
+}
+
+.character.speaking .head{
+    animation:headTalk .35s ease-in-out infinite alternate;
+}
+
+@keyframes headTalk{
+    from{transform:rotate(-2deg)}
+    to{transform:rotate(2deg)}
+}
+
+/*
+   Mouth overlay.
+   The emoji itself cannot have its lips changed, so this small
+   animated mouth is placed under the face to visually simulate speech.
+*/
+.character .mouth{
+    position:absolute;
+    z-index:5;
+    width:13px;
+    height:4px;
+    left:50%;
+    top:58%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:#7f1d1d;
+    opacity:0;
+}
+
+/* talking mouth */
+.character.speaking .mouth{
+    opacity:1;
+    animation:lipSync .16s steps(2,end) infinite;
+}
+
+@keyframes lipSync{
+    0%{
+        width:10px;
+        height:3px;
+        border-radius:50%;
+    }
+    50%{
+        width:15px;
+        height:9px;
+        border-radius:45%;
+    }
+    100%{
+        width:11px;
+        height:4px;
+        border-radius:50%;
+    }
+}
+
+.house{
+    position:absolute;
+    z-index:2;
+    right:25px;
+    bottom:10px;
+    font-size:55px;
+    animation:houseFloat 5s ease-in-out infinite;
+}
+
+@keyframes houseFloat{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-4px)}
+}
+
+/* scene has a subtle breathing effect */
+.family-row{
+    animation:sceneBreath 5s ease-in-out infinite;
+}
+
+@keyframes sceneBreath{
+    0%,100%{filter:brightness(1)}
+    50%{filter:brightness(1.035)}
+}
+
+@media(max-width:600px){
+    .family-row{gap:3px;margin-top:42px}
+    .character{min-width:58px}
+    .character .head{font-size:48px}
+    .character span{font-size:9px;padding:3px 5px}
+    .character .mouth{top:58%;width:10px}
+    .house{font-size:42px;right:8px}
+    .cloud{font-size:25px}
+}
+
+/* Real cartoon family artwork + lip-sync overlays */
+.photo-art{
+  position:relative;
+  overflow:hidden;
+  background:#dbeafe;
+  height:auto;
+  aspect-ratio:3/2;
+  min-height:360px;
+}
+.family-photo{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+}
+.photo-character{
+  position:absolute;
+  width:8%;
+  height:11%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+  z-index:5;
+}
+.photo-character .photo-mouth{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:16px;
+  height:5px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:#8b1e3f;
+  opacity:0;
+  box-shadow:0 1px 2px rgba(0,0,0,.18);
+}
+.photo-character.speaking .photo-mouth{
+  opacity:1;
+  animation:photoLipSync .13s steps(2,end) infinite;
+}
+.photo-character.speaking{
+  animation:photoSpeaker .42s ease-in-out infinite alternate;
+}
+@keyframes photoLipSync{
+  0%{width:10px;height:3px;border-radius:50%}
+  45%{width:17px;height:10px;border-radius:48%}
+  75%{width:13px;height:7px;border-radius:45%}
+  100%{width:10px;height:3px;border-radius:50%}
+}
+@keyframes photoSpeaker{
+  from{transform:translate(-50%,-50%) scale(1)}
+  to{transform:translate(-50%,-54%) scale(1.035)}
+}
+/* Face/mouth anchor points in the generated 1536x1024 artwork */
+.photo-character.dad{left:18.3%;top:29.0%}
+.photo-character.mom{left:34.4%;top:32.2%}
+.photo-character.hasan{left:50.0%;top:37.0%}
+.photo-character.soha{left:67.0%;top:36.0%}
+.photo-character.safa{left:84.0%;top:39.0%}
+@media(max-width:600px){
+  .photo-art{min-height:260px}
+  .photo-character .photo-mouth{width:11px;height:4px}
+}
+
+/* ==========================================
+   EXTRA ANIMATION: SUN + BIRDS + FAMILY CLAP
+   ========================================== */
+.photo-art::before{
+  content:'☀️';
+  position:absolute;
+  z-index:3;
+  right:7%;
+  top:5%;
+  font-size:clamp(42px,7vw,78px);
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.15));
+  animation:sunDance 4s ease-in-out infinite;
+  pointer-events:none;
+}
+.photo-art::after{
+  content:'🐦   🐦';
+  position:absolute;
+  z-index:3;
+  left:36%;
+  top:7%;
+  font-size:clamp(22px,4vw,42px);
+  letter-spacing:10px;
+  animation:birdFly 9s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes sunDance{
+  0%,100%{transform:translateY(0) rotate(-5deg) scale(1)}
+  50%{transform:translateY(-10px) rotate(5deg) scale(1.06)}
+}
+@keyframes birdFly{
+  0%{transform:translateX(-10px) translateY(0) rotate(-3deg)}
+  50%{transform:translateX(70px) translateY(-14px) rotate(4deg)}
+  100%{transform:translateX(-10px) translateY(0) rotate(-3deg)}
+}
+.photo-character.clapping{
+  animation:clapBody .22s ease-in-out infinite alternate !important;
+}
+.photo-character.clapping .photo-mouth{
+  opacity:1;
+  animation:photoLipSync .16s steps(2,end) infinite;
+}
+@keyframes clapBody{
+  from{transform:translate(-50%,-50%) scale(1)}
+  to{transform:translate(-50%,-53%) scale(1.045)}
+}
+
+
+/* ===== Clean top controls ===== */
+body{min-height:100vh}.app{max-width:1180px;margin:auto;padding:14px 12px 40px}.top-controls{display:flex;gap:9px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin-bottom:12px}.top-controls select,.top-controls button{border:0;border-radius:13px;padding:12px 15px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 5px 15px #0002;background:#fff;color:#27323a}.top-controls select{border:2px solid #bfdbfe}.top-controls button{color:#fff}.top-controls #editStories{background:#7c3aed}.top-controls #listen{background:#2563eb}.top-controls #full{background:#059669}.top-controls #stop{background:#dc2626}.top-controls button:hover{transform:translateY(-1px)}.book{box-shadow:0 18px 55px #0002}.photo-art{aspect-ratio:3/2;min-height:420px}.family-photo{object-position:center center}.story{background:rgba(255,255,255,.96)}.bottom-controls{display:flex;justify-content:center;gap:10px;margin-top:14px}.bottom-controls button{border:0;border-radius:12px;padding:11px 17px;background:#fff;font-weight:800;cursor:pointer;box-shadow:0 4px 12px #0002}.status{margin:14px 0}.progress{margin-top:14px}
+
+/* Sun, birds and butterflies move over the artwork */
+.sun-overlay,.bird-overlay,.butterfly-overlay{position:absolute;z-index:6;pointer-events:none;filter:drop-shadow(0 4px 4px rgba(0,0,0,.16));user-select:none}.sun-overlay{right:8%;top:6%;font-size:clamp(40px,6vw,72px);animation:sunFloat 4s ease-in-out infinite}.bird-overlay{font-size:clamp(25px,4vw,46px)}.bird-a{left:34%;top:5%;animation:birdPathA 8s ease-in-out infinite}.bird-b{right:6%;top:16%;animation:birdPathB 10s ease-in-out infinite}.butterfly-overlay{font-size:clamp(22px,3.4vw,38px)}.butterfly-a{left:7%;top:26%;animation:butterflyA 7s ease-in-out infinite}.butterfly-b{right:9%;top:38%;animation:butterflyB 8s ease-in-out infinite}.butterfly-c{left:54%;top:17%;animation:butterflyC 9s ease-in-out infinite}.photo-art:after{content:'🍃  🍃  🌸';position:absolute;z-index:4;left:4%;bottom:4%;font-size:clamp(18px,2.5vw,30px);opacity:.85;animation:petalFloat 5s ease-in-out infinite;pointer-events:none}@keyframes sunFloat{0%,100%{transform:translateY(0) rotate(-4deg) scale(1)}50%{transform:translateY(-12px) rotate(5deg) scale(1.08)}}@keyframes birdPathA{0%{transform:translate(0,0) rotate(-5deg)}50%{transform:translate(110px,-30px) rotate(8deg)}100%{transform:translate(0,0) rotate(-5deg)}}@keyframes birdPathB{0%{transform:translate(0,0) rotate(5deg)}50%{transform:translate(-100px,35px) rotate(-8deg)}100%{transform:translate(0,0) rotate(5deg)}}@keyframes butterflyA{0%,100%{transform:translate(0,0) rotate(-5deg)}50%{transform:translate(70px,-35px) rotate(15deg)}}@keyframes butterflyB{0%,100%{transform:translate(0,0) rotate(8deg)}50%{transform:translate(-65px,45px) rotate(-12deg)}}@keyframes butterflyC{0%,100%{transform:translate(0,0) rotate(0)}50%{transform:translate(50px,-25px) rotate(10deg)}}@keyframes petalFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px) rotate(4deg)}}
+
+/* Two-hand clap visual: hands in the artwork move together as the character bobs */
+.photo-character.clapping{animation:clapTogether .24s ease-in-out infinite alternate!important}.photo-character.clapping:after{content:'👏';position:absolute;left:50%;top:52%;transform:translate(-50%,-50%) scale(.8);font-size:clamp(20px,3vw,34px);opacity:.72;animation:clapFlash .24s ease-in-out infinite alternate}.photo-character.clapping .photo-mouth{opacity:1;animation:photoLipSync .15s steps(2,end) infinite}@keyframes clapTogether{from{transform:translate(-50%,-50%) scale(1)}to{transform:translate(-50%,-55%) scale(1.055)}}@keyframes clapFlash{from{transform:translate(-50%,-50%) scale(.72);opacity:.35}to{transform:translate(-50%,-50%) scale(1.02);opacity:.9}}
+
+/* ===== Story editor modal ===== */
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.62);display:none;align-items:center;justify-content:center;padding:18px;z-index:1000}.modal.open{display:flex}.editor-card{width:min(850px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:22px;box-shadow:0 30px 90px #0005;padding:24px}.editor-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.editor-head h2{margin:0;color:#7c3aed;font-size:28px}.editor-head p{margin:6px 0 18px;color:#64748b}.close-btn{border:0;background:#fee2e2;color:#991b1b;border-radius:10px;padding:9px 12px;font-size:18px;cursor:pointer}.editor-toolbar{display:grid;grid-template-columns:1fr 1.6fr;gap:12px;margin-bottom:15px}.editor-toolbar label{font-weight:800;color:#334155}.editor-toolbar select,.editor-input,.editor-textarea{width:100%;margin-top:7px;border:1px solid #cbd5e1;border-radius:11px;padding:11px;font-size:15px}.editor-textarea{min-height:210px;resize:vertical;line-height:1.65;font-family:inherit}.field-label{display:block;font-weight:800;color:#334155;margin:12px 0 4px}.editor-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}.editor-actions button{border:0;border-radius:11px;padding:11px 15px;font-weight:800;cursor:pointer}.save-btn{background:#059669;color:#fff}.reset-btn{background:#f59e0b;color:#fff}.reset-all-btn{background:#ef4444;color:#fff}.edit-status{min-height:24px;margin-top:10px;color:#166534;font-weight:700}@media(max-width:700px){.top-controls{justify-content:center}.top-controls select,.top-controls button{font-size:12px;padding:10px 11px}.photo-art{min-height:270px}.editor-toolbar{grid-template-columns:1fr}.story{padding:22px}.story p{font-size:17px}}
+/* Disable decorative pseudo overlays; the dedicated animated elements above are used instead. */
+.photo-art::before,.photo-art::after{content:none!important}

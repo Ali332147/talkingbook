@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Our Family Talking Book</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <div class="top-controls">
+    <select id="language" aria-label="Language">
+      <option value="bn">🇧🇩 Bangla</option>
+      <option value="en">🇺🇸 English</option>
+      <option value="es">🇪🇸 Spanish</option>
+    </select>
+    <button id="editStories" class="edit-btn">✏️ Edit Stories</button>
+    <button id="listen">🔊 Listen This Story</button>
+    <button id="full">▶️ Listen All 10 Stories</button>
+    <button id="stop">⏹ Stop</button>
+  </div>
+
+  <section class="book">
+    <div class="art photo-art" id="familyScene" role="img" aria-label="Animated Jaber family">
+      <img class="family-photo" src="family-scene.png" alt="Jaber, Sharmin, Hasan, Soha and Safa family cartoon">
+      <div class="photo-character dad" data-character="dad"><div class="photo-mouth"></div></div>
+      <div class="photo-character mom" data-character="mom"><div class="photo-mouth"></div></div>
+      <div class="photo-character hasan" data-character="hasan"><div class="photo-mouth"></div></div>
+      <div class="photo-character soha" data-character="soha"><div class="photo-mouth"></div></div>
+      <div class="photo-character safa" data-character="safa"><div class="photo-mouth"></div></div>
+      <div class="sun-overlay">☀️</div>
+      <div class="bird-overlay bird-a">🐦</div>
+      <div class="bird-overlay bird-b">🐦</div>
+      <div class="butterfly-overlay butterfly-a">🦋</div>
+      <div class="butterfly-overlay butterfly-b">🦋</div>
+      <div class="butterfly-overlay butterfly-c">🦋</div>
+    </div>
+    <div class="story">
+      <small id="label"></small>
+      <h2 id="title"></h2>
+      <p id="text"></p>
+    </div>
+  </section>
+
+  <div id="status">❤️ Ready</div>
+  <div class="bottom-controls">
+    <button id="prev">← Previous</button>
+    <button id="next">Next →</button>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+  <div id="count"></div>
+</div>
+
+<!-- Story Editor -->
+<div id="editorModal" class="modal" aria-hidden="true">
+  <div class="editor-card">
+    <div class="editor-head">
+      <div><h2>✏️ Edit Stories</h2><p>Edit any of the 10 stories and save them in your browser.</p></div>
+      <button id="closeEditor" class="close-btn">✕</button>
+    </div>
+    <div class="editor-toolbar">
+      <label>Language
+        <select id="editLanguage">
+          <option value="bn">🇧🇩 Bangla</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="es">🇪🇸 Spanish</option>
+        </select>
+      </label>
+      <label>Story
+        <select id="editStorySelect"></select>
+      </label>
+    </div>
+    <label class="field-label">Story Title</label>
+    <input id="editTitle" class="editor-input" type="text">
+    <label class="field-label">Story Text</label>
+    <textarea id="editText" class="editor-textarea"></textarea>
+    <div class="editor-actions">
+      <button id="saveStory" class="save-btn">💾 Save Story</button>
+      <button id="resetStory" class="reset-btn">↩ Reset This Story</button>
+      <button id="resetAll" class="reset-all-btn">♻ Reset All Stories</button>
+    </div>
+    <div id="editStatus" class="edit-status"></div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
