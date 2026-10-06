@@ -95,21 +95,33 @@ function speakNextSentence(i, all) {
   }
 
   const voices = speechSynthesis.getVoices();
-  const exact = voices.find(
+  const prefix = u.lang.split("-")[0].toLowerCase();
+
+  // Prefer a female-sounding browser voice when the operating system
+  // provides one. Web Speech API does not expose a universal gender flag,
+  // so common female voice names are used as a best-effort preference.
+  const femaleNames =
+    /female|zira|samantha|ava|jenny|aria|susan|hazel|libby|karen|moira|siri|google uk english female|google us english female|microsoft.*female/i;
+
+  const sameLanguage = voices.filter(
+    v => v.lang && v.lang.toLowerCase().startsWith(prefix)
+  );
+
+  const exact = sameLanguage.find(
     v => v.lang.toLowerCase() === u.lang.toLowerCase()
   );
 
-  const prefix = u.lang.split("-")[0].toLowerCase();
-
-  const matching = voices.find(
-    v => v.lang.toLowerCase().startsWith(prefix)
+  const femaleExact = sameLanguage.find(
+    v => v.lang.toLowerCase() === u.lang.toLowerCase() && femaleNames.test(v.name)
   );
 
-  if (exact) {
-    u.voice = exact;
-  } else if (matching) {
-    u.voice = matching;
-  }
+  const femaleMatch = sameLanguage.find(v => femaleNames.test(v.name));
+
+  u.voice = femaleExact || femaleMatch || exact || sameLanguage[0] || null;
+
+  // Slightly warmer, feminine-style delivery. The actual voice is selected
+  // from the browser/Windows voice list above.
+  u.pitch = lang === "en" ? 1.10 : lang === "es" ? 1.08 : 1.08;
 
   $("status").textContent =
     `🔊 Reading Story ${i + 1} of 10 — ` +
@@ -154,7 +166,7 @@ function speakNextSentence(i, all) {
 }
 
 $('language').onchange=e=>{lang=e.target.value;stop();render();$('status').textContent='🌎 Language changed';};
-$('listen').onclick=()=>{stopped=false;full=false;speak(page,false);};
+$('listen').onclick=()=>{stopped=false;full=true;speak(page,true);};
 $('full').onclick=()=>{stopped=false;full=true;speak(0,true);};
 function stop(){stopped=true;full=false;speechSynthesis.cancel();stopCharacterAnimation();}
 $('stop').onclick=()=>{stop();$('status').textContent='⏹ Stopped';};
